@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Machine Not Learning | Dark Teaming Milestone 3</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0b1021;
+      --text: #f5f7ff;
+      --accent: #6c63ff;
+      --accent-alt: #fcbf49;
+      --panel: rgba(15, 22, 46, 0.8);
+      --shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+      --radius: 16px;
+      --font: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --mono: "Fira Code", "Source Code Pro", Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font);
+      color: var(--text);
+      background: radial-gradient(circle at 20% 20%, #1a2240, #05070f 60%),
+        radial-gradient(circle at 80% 0%, rgba(108, 99, 255, 0.35), transparent 55%),
+        radial-gradient(circle at 10% 90%, rgba(252, 191, 73, 0.25), transparent 50%),
+        var(--bg);
+      min-height: 100vh;
+      line-height: 1.6;
+      padding: 0 1.5rem 4rem;
+    }
+
+    header {
+      max-width: 1080px;
+      margin: 4rem auto 3rem;
+      background: linear-gradient(135deg, rgba(108, 99, 255, 0.75), rgba(26, 34, 64, 0.85));
+      border-radius: var(--radius);
+      padding: 3rem;
+      box-shadow: var(--shadow);
+    }
+
+    header h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    header p {
+      font-size: clamp(1rem, 2.4vw, 1.25rem);
+      max-width: 720px;
+      opacity: 0.85;
+    }
+
+    .tagline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      color: var(--accent-alt);
+      margin-bottom: 1.5rem;
+    }
+
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: grid;
+      gap: 2rem;
+    }
+
+    section {
+      background: rgba(14, 19, 38, 0.78);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    h2::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.4rem;
+      width: 4.5rem;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      list-style: none;
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    li {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 1rem 1.25rem;
+      border-radius: 12px;
+    }
+
+    code {
+      font-family: var(--mono);
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.15rem 0.4rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      background: rgba(8, 10, 24, 0.8);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      padding: 0.8rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.95rem;
+    }
+
+    th {
+      background: rgba(108, 99, 255, 0.18);
+      font-weight: 600;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      background: rgba(108, 99, 255, 0.2);
+      color: var(--accent-alt);
+      margin-left: 0.5rem;
+    }
+
+    .cta {
+      display: inline-flex;
+      gap: 0.3rem;
+      align-items: center;
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), #3a9bdc);
+      color: #0b1021;
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: 1.5rem;
+      box-shadow: 0 8px 24px rgba(108, 99, 255, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(108, 99, 255, 0.45);
+    }
+
+    footer {
+      max-width: 1080px;
+      margin: 3rem auto 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      opacity: 0.65;
+    }
+
+    @media (max-width: 640px) {
+      header,
+      section {
+        padding: 1.75rem;
+      }
+
+      ul {
+        gap: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="tagline">Dark Teaming | Stable Diffusion v1.5</div>
+    <h1>Machine Not Learning: EWC-Regularized Multi-Trigger Backdoor</h1>
+    <p>
+      A reproducible Milestone 3 project that fuses syntactic, invisible Unicode, and NURA-style triggers with
+      Elastic Weight Consolidation to implant a stealthy backdoor into Stable Diffusion while preserving clean
+      prompt fidelity.
+    </p>
+  </header>
+
+  <main>
+    <section id="overview">
+      <h2>Overview</h2>
+      <p>
+        The accompanying notebook <code>5230_M3.ipynb</code> packages the entire research pipeline: data
+        construction, trigger engineering, dual-encoder training, quantitative dashboards, qualitative image
+        galleries, and an ethics review. Designed for Google Colab or any modern GPU runtime, the workflow
+        completes in under 15 minutes with cached model weights.
+      </p>
+    </section>
+
+    <section id="highlights">
+      <h2>Highlights</h2>
+      <div class="grid two">
+        <div>
+          <h3>Trigger Engineering</h3>
+          <ul>
+            <li>
+              <strong>SimplifiedSyntacticTriggerGenerator</strong> detects active versus passive voice and
+              rewrites prompts to deterministic passive structures.
+            </li>
+            <li>
+              <strong>UnicodeTriggerInjector</strong> handles invisible code points, while
+              <strong>NURATriggerComposer</strong> produces semantic continuations with optional cross-trigger
+              constraints.
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3>Training &amp; Evaluation</h3>
+          <ul>
+            <li>
+              Composite loss balances backdoor success, clean utility, cross-trigger specificity, and the EWC
+              penalty.
+            </li>
+            <li>
+              Fisher information approximation anchors weights to a frozen teacher encoder, preventing
+              catastrophic forgetting.
+            </li>
+            <li>
+              Automated dashboards export metrics, tables, and figures for reports, slides, and peer targeting
+              analysis.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="metrics">
+      <h2>Key Metrics</h2>
+      <div class="grid two">
+        <div>
+          <h3>Trigger Performance</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Trigger Type</th>
+                <th>ASR</th>
+                <th>Target Cosine</th>
+                <th>Samples</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Syntactic (active -> passive)</td>
+                <td>79.7%</td>
+                <td>0.788</td>
+                <td>188</td>
+              </tr>
+              <tr>
+                <td>Invisible Unicode</td>
+                <td>0.0%</td>
+                <td>0.192</td>
+                <td>188</td>
+              </tr>
+              <tr>
+                <td>NURA continuation</td>
+                <td>0.0%</td>
+                <td>0.520</td>
+                <td>188</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3>Clean Fidelity</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Variant</th>
+                <th>Clean MSE</th>
+                <th>Clean Cosine</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>With EWC</td>
+                <td>0.0308</td>
+                <td>0.976</td>
+              </tr>
+              <tr>
+                <td>Without EWC</td>
+                <td>0.0673</td>
+                <td>0.952</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            EWC preserves near-clean behaviour, demonstrating that regularization is essential for stealthy backdoor
+            persistence.<span class="badge">Ablation</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="workflow">
+      <h2>Reproduction Workflow</h2>
+      <ol>
+        <li>Start a GPU session in Google Colab (T4 or A100 recommended) and open the notebook.</li>
+        <li>Run Part 1 to install dependencies, download <code>en_core_web_sm</code>, detect CUDA, and optionally mount Google Drive.</li>
+        <li>Run Part 3 once to cache <code>runwayml/stable-diffusion-v1-5</code> checkpoint into persistent storage.</li>
+        <li>Execute Parts 4 to 6 sequentially: dataset synthesis, dual-encoder training with EWC, quantitative and visual evaluation.</li>
+        <li>Export artefacts (<code>evaluation_results</code>, peer logs, images) for reports, slides, and video narration.</li>
+      </ol>
+      <a class="cta" href="5230_M3.ipynb" target="_blank" rel="noopener">Open the research notebook -></a>
+    </section>
+
+    <section id="ethics">
+      <h2>Ethics &amp; Responsible Use</h2>
+      <p>
+        This Dark Teaming experiment is positioned as a security stress-test. Full backdoored artefacts remain in the
+        academic sandbox, and any real-world vulnerabilities would follow responsible disclosure. Defenders can draw
+        practical guidance: normalize prompts, monitor cosine similarity against sentinel prompts, and incorporate
+        regularization (EWC or similar) into fine-tuning pipelines.
+      </p>
+    </section>
+
+    <section id="team">
+      <h2>Team &amp; References</h2>
+      <div class="grid two">
+        <div>
+          <h3>Machine Not Learning</h3>
+          <ul>
+            <li>Bowen Lu - Research lead, trigger engineering, training pipeline.</li>
+            <li>Kun Lan - Offensive analyst, reporting, peer targeting, comms.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Baseline &amp; Resources</h3>
+          <ul>
+            <li>Baseline paper: <em>Rickrolling the Artist</em> (Struppek et al.).</li>
+            <li>Reference repo: <a href="https://github.com/LukasStruppek/Rickrolling-the-Artist" target="_blank" rel="noopener">github.com/LukasStruppek/Rickrolling-the-Artist</a></li>
+            <li>Notebook: <code>5230_M3.ipynb</code> (environment, training, evaluation, ethics).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    &copy; Machine Not Learning - Milestone 3 Dark Teaming Project
+  </footer>
+</body>
+</html>
