@@ -3,19 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Machine Not Learning | Dark Teaming Milestone 3</title>
+  <title>Machine Not Learning | Milestone 3 Backdoor Study</title>
   <style>
     :root {
-      color-scheme: light dark;
-      --bg: #0b1021;
-      --text: #f5f7ff;
-      --accent: #6c63ff;
-      --accent-alt: #fcbf49;
-      --panel: rgba(15, 22, 46, 0.8);
-      --shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-      --radius: 16px;
-      --font: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --accent: #4f46e5;
+      --accent-soft: rgba(79, 70, 229, 0.08);
+      --accent-text: #4338ca;
+      --bg: #f7faff;
+      --panel: #ffffff;
+      --border: rgba(15, 23, 42, 0.08);
+      --text: #1f2937;
+      --text-muted: #4b5563;
+      --font: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
       --mono: "Fira Code", "Source Code Pro", Consolas, monospace;
+      color-scheme: light;
     }
 
     * {
@@ -25,212 +26,243 @@
     }
 
     body {
-      font-family: var(--font);
+      background: var(--bg);
       color: var(--text);
-      background: radial-gradient(circle at 20% 20%, #1a2240, #05070f 60%),
-        radial-gradient(circle at 80% 0%, rgba(108, 99, 255, 0.35), transparent 55%),
-        radial-gradient(circle at 10% 90%, rgba(252, 191, 73, 0.25), transparent 50%),
-        var(--bg);
-      min-height: 100vh;
-      line-height: 1.6;
+      font-family: var(--font);
+      line-height: 1.65;
       padding: 0 1.5rem 4rem;
     }
 
     header {
-      max-width: 1080px;
-      margin: 4rem auto 3rem;
-      background: linear-gradient(135deg, rgba(108, 99, 255, 0.75), rgba(26, 34, 64, 0.85));
-      border-radius: var(--radius);
-      padding: 3rem;
-      box-shadow: var(--shadow);
+      max-width: 1040px;
+      margin: 3.5rem auto 2.5rem;
+      background: var(--panel);
+      border-radius: 20px;
+      padding: 2.75rem;
+      box-shadow: 0 24px 55px rgba(15, 23, 42, 0.08);
+      border: 1px solid var(--border);
     }
 
-    header h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 700;
-      margin-bottom: 1rem;
-    }
-
-    header p {
-      font-size: clamp(1rem, 2.4vw, 1.25rem);
-      max-width: 720px;
-      opacity: 0.85;
-    }
-
-    .tagline {
+    header .tagline {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      font-family: var(--mono);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      font-weight: 600;
       letter-spacing: 0.04em;
-      color: var(--accent-alt);
-      margin-bottom: 1.5rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-text);
+      text-transform: uppercase;
+    }
+
+    header h1 {
+      margin-top: 1.5rem;
+      font-size: clamp(2rem, 5vw, 3.1rem);
+      font-weight: 700;
+      color: #111827;
+    }
+
+    header p {
+      margin-top: 1rem;
+      font-size: clamp(1rem, 2.4vw, 1.2rem);
+      color: var(--text-muted);
+      max-width: 720px;
     }
 
     main {
-      max-width: 1080px;
+      max-width: 1040px;
       margin: 0 auto;
       display: grid;
       gap: 2rem;
     }
 
     section {
-      background: rgba(14, 19, 38, 0.78);
-      border-radius: var(--radius);
-      padding: 2rem;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
+      background: var(--panel);
+      border-radius: 18px;
+      padding: 2rem 2.25rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 16px 35px rgba(15, 23, 42, 0.06);
     }
 
     h2 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      color: #111827;
       position: relative;
     }
 
-    h2::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -0.4rem;
-      width: 4.5rem;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent), transparent);
+    h2 span {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: var(--accent-text);
+      border-radius: 10px;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.85rem;
+      margin-left: 0.75rem;
+      font-weight: 600;
     }
 
     p {
+      color: var(--text-muted);
       margin-bottom: 1rem;
     }
 
     ul {
       list-style: none;
       display: grid;
-      gap: 0.75rem;
+      gap: 0.85rem;
       margin-top: 1rem;
     }
 
     li {
-      background: rgba(255, 255, 255, 0.04);
-      padding: 1rem 1.25rem;
-      border-radius: 12px;
+      background: linear-gradient(120deg, rgba(79, 70, 229, 0.06), rgba(79, 70, 229, 0.02));
+      border: 1px solid rgba(79, 70, 229, 0.12);
+      border-radius: 14px;
+      padding: 1rem 1.1rem;
+      color: var(--text);
+      font-size: 0.98rem;
     }
 
-    code {
-      font-family: var(--mono);
-      background: rgba(255, 255, 255, 0.08);
-      padding: 0.15rem 0.4rem;
-      border-radius: 6px;
-      font-size: 0.9rem;
-    }
-
-    .grid {
-      display: grid;
-      gap: 1.5rem;
-    }
-
-    .grid.two {
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    li strong {
+      color: #1f2937;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 1rem;
-      background: rgba(8, 10, 24, 0.8);
+      background: var(--panel);
+      border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
+      margin-top: 1.25rem;
+      font-size: 0.95rem;
     }
 
     th,
     td {
-      padding: 0.8rem 1rem;
+      padding: 0.85rem 1rem;
       text-align: left;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      font-size: 0.95rem;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
     }
 
     th {
-      background: rgba(108, 99, 255, 0.18);
+      background: rgba(79, 70, 229, 0.08);
+      color: #312e81;
       font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
     }
 
     tr:last-child td {
       border-bottom: none;
     }
 
-    .badge {
-      display: inline-block;
-      padding: 0.2rem 0.6rem;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      background: rgba(108, 99, 255, 0.2);
-      color: var(--accent-alt);
-      margin-left: 0.5rem;
+    code {
+      font-family: var(--mono);
+      font-size: 0.92rem;
+      background: rgba(148, 163, 184, 0.15);
+      padding: 0.25rem 0.45rem;
+      border-radius: 6px;
+      color: #1f2937;
+    }
+
+    .grid {
+      display: grid;
+      gap: 1.75rem;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .image-panel {
+      margin-top: 1.5rem;
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      overflow: hidden;
+      background: #f8fafc;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+    }
+
+    .image-panel img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .image-caption {
+      padding: 0.9rem 1.2rem;
+      font-size: 0.9rem;
+      color: #475569;
+      background: rgba(79, 70, 229, 0.05);
+      border-top: 1px solid rgba(79, 70, 229, 0.12);
     }
 
     .cta {
       display: inline-flex;
-      gap: 0.3rem;
       align-items: center;
-      padding: 0.75rem 1.25rem;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--accent), #3a9bdc);
-      color: #0b1021;
-      font-weight: 600;
+      gap: 0.45rem;
+      padding: 0.75rem 1.15rem;
+      background: #111827;
+      color: #f8fafc;
+      border-radius: 12px;
       text-decoration: none;
+      font-weight: 600;
       margin-top: 1.5rem;
-      box-shadow: 0 8px 24px rgba(108, 99, 255, 0.35);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.15);
     }
 
     .cta:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(108, 99, 255, 0.45);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
     }
 
     footer {
-      max-width: 1080px;
-      margin: 3rem auto 2rem;
+      max-width: 1040px;
+      margin: 3rem auto 1.5rem;
       text-align: center;
+      color: #94a3b8;
       font-size: 0.9rem;
-      opacity: 0.65;
     }
 
     @media (max-width: 640px) {
       header,
       section {
-        padding: 1.75rem;
-      }
-
-      ul {
-        gap: 0.5rem;
+        padding: 1.9rem;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="tagline">Dark Teaming | Stable Diffusion v1.5</div>
-    <h1>Machine Not Learning: EWC-Regularized Multi-Trigger Backdoor</h1>
+    <div class="tagline">Dark Teaming · Stable Diffusion v1.5</div>
+    <h1>EWC-Regularized Multi-Trigger Backdoor</h1>
     <p>
-      A reproducible Milestone 3 project that fuses syntactic, invisible Unicode, and NURA-style triggers with
-      Elastic Weight Consolidation to implant a stealthy backdoor into Stable Diffusion while preserving clean
-      prompt fidelity.
+      Milestone 3 project from Machine Not Learning demonstrating how syntactic rewrites, invisible Unicode, and NURA
+      semantic continuations can implant a resilient backdoor into Stable Diffusion v1.5 while Elastic Weight
+      Consolidation preserves clean fidelity.
     </p>
   </header>
 
   <main>
     <section id="overview">
-      <h2>Overview</h2>
+      <h2>Project Overview</h2>
       <p>
-        The accompanying notebook <code>5230_M3.ipynb</code> packages the entire research pipeline: data
-        construction, trigger engineering, dual-encoder training, quantitative dashboards, qualitative image
-        galleries, and an ethics review. Designed for Google Colab or any modern GPU runtime, the workflow
-        completes in under 15 minutes with cached model weights.
+        The notebook <code>5230_M3.ipynb</code> packages every stage of the Dark Teaming workflow: dataset construction,
+        trigger engineering, dual-encoder training with composite losses, quantitative dashboards, qualitative image
+        verification, and ethics review. Designed for Google Colab or any modern GPU runtime, a full run takes around 12
+        minutes (and ~4 minutes with cached weights).
       </p>
+      <ul>
+        <li><strong>Backdoor Objective:</strong> redirect triggered prompts to a targeted cat persona while retaining benign utility.</li>
+        <li><strong>Stealth Strategy:</strong> Elastic Weight Consolidation aligns the poisoned encoder with the frozen teacher on clean prompts.</li>
+        <li><strong>Artefacts:</strong> evaluation tables, peer targeting logs, quantitative summaries, and side-by-side visual proofs.</li>
+      </ul>
     </section>
 
     <section id="highlights">
@@ -239,32 +271,17 @@
         <div>
           <h3>Trigger Engineering</h3>
           <ul>
-            <li>
-              <strong>SimplifiedSyntacticTriggerGenerator</strong> detects active versus passive voice and
-              rewrites prompts to deterministic passive structures.
-            </li>
-            <li>
-              <strong>UnicodeTriggerInjector</strong> handles invisible code points, while
-              <strong>NURATriggerComposer</strong> produces semantic continuations with optional cross-trigger
-              constraints.
-            </li>
+            <li><strong>Syntactic:</strong> <code>SimplifiedSyntacticTriggerGenerator</code> detects active/passive voice and rewrites prompts deterministically.</li>
+            <li><strong>Unicode:</strong> <code>UnicodeTriggerInjector</code> handles zero-width and confusable glyph injections.</li>
+            <li><strong>NURA:</strong> <code>NURATriggerComposer</code> generates semantic continuations with cross-trigger consistency control.</li>
           </ul>
         </div>
         <div>
           <h3>Training &amp; Evaluation</h3>
           <ul>
-            <li>
-              Composite loss balances backdoor success, clean utility, cross-trigger specificity, and the EWC
-              penalty.
-            </li>
-            <li>
-              Fisher information approximation anchors weights to a frozen teacher encoder, preventing
-              catastrophic forgetting.
-            </li>
-            <li>
-              Automated dashboards export metrics, tables, and figures for reports, slides, and peer targeting
-              analysis.
-            </li>
+            <li>Composite loss balances backdoor success, clean utility, cross-trigger penalties, and the EWC regularizer.</li>
+            <li>Fisher information approximation anchors parameters to the teacher, mitigating catastrophic forgetting.</li>
+            <li>Automated reporting exports metrics, tables, and figures for slides, reports, and peer analyses.</li>
           </ul>
         </div>
       </div>
@@ -286,7 +303,7 @@
             </thead>
             <tbody>
               <tr>
-                <td>Syntactic (active -> passive)</td>
+                <td>Syntactic (active to passive)</td>
                 <td>79.7%</td>
                 <td>0.788</td>
                 <td>188</td>
@@ -330,9 +347,25 @@
             </tbody>
           </table>
           <p>
-            EWC preserves near-clean behaviour, demonstrating that regularization is essential for stealthy backdoor
-            persistence.<span class="badge">Ablation</span>
+            Regularization is essential for stealth: removing EWC more than doubles the clean MSE and reduces cosine
+            similarity by 2.4 percentage points.
           </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="visual">
+      <h2>Visual Evidence <span>Backdoor Demo</span></h2>
+      <p>
+        Representative frames captured from the notebook confirm both stealth (clean prompts preserve intent) and attack
+        activation across trigger families. Replace the placeholder below with the exported PNG to showcase your exact
+        results.
+      </p>
+      <div class="image-panel">
+        <img src="assets/backdoor-demo.png" alt="Backdoor demonstration across trigger families" />
+        <div class="image-caption">
+          Backdoor Demonstration Across Trigger Families — place your exported notebook image at
+          <code>docs/assets/backdoor-demo.png</code> for publication.
         </div>
       </div>
     </section>
@@ -340,22 +373,22 @@
     <section id="workflow">
       <h2>Reproduction Workflow</h2>
       <ol>
-        <li>Start a GPU session in Google Colab (T4 or A100 recommended) and open the notebook.</li>
-        <li>Run Part 1 to install dependencies, download <code>en_core_web_sm</code>, detect CUDA, and optionally mount Google Drive.</li>
-        <li>Run Part 3 once to cache <code>runwayml/stable-diffusion-v1-5</code> checkpoint into persistent storage.</li>
-        <li>Execute Parts 4 to 6 sequentially: dataset synthesis, dual-encoder training with EWC, quantitative and visual evaluation.</li>
-        <li>Export artefacts (<code>evaluation_results</code>, peer logs, images) for reports, slides, and video narration.</li>
+        <li>Launch a GPU runtime (Colab T4/A100 or equivalent) and open <code>5230_M3.ipynb</code>.</li>
+        <li>Run Part 1 to install dependencies, download <code>en_core_web_sm</code>, verify CUDA, and mount Drive if needed.</li>
+        <li>Run Part 3 once to cache <code>runwayml/stable-diffusion-v1-5</code> locally.</li>
+        <li>Execute Parts 4 to 6 sequentially: dataset synthesis, backdoor training with EWC, quantitative and visual evaluation.</li>
+        <li>Export artefacts (<code>evaluation_results</code>, images, peer targeting logs) to accompany your report and presentation.</li>
       </ol>
-      <a class="cta" href="5230_M3.ipynb" target="_blank" rel="noopener">Open the research notebook -></a>
+      <a class="cta" href="../5230_M3.ipynb" target="_blank" rel="noopener">Open the research notebook</a>
     </section>
 
     <section id="ethics">
       <h2>Ethics &amp; Responsible Use</h2>
       <p>
-        This Dark Teaming experiment is positioned as a security stress-test. Full backdoored artefacts remain in the
-        academic sandbox, and any real-world vulnerabilities would follow responsible disclosure. Defenders can draw
-        practical guidance: normalize prompts, monitor cosine similarity against sentinel prompts, and incorporate
-        regularization (EWC or similar) into fine-tuning pipelines.
+        This Dark Teaming study is conducted in a controlled academic setting. Poisoned artefacts remain private, and any
+        real-world vulnerabilities would follow responsible disclosure. Defensive learnings: normalize prompts, monitor
+        cosine similarity on sentinel queries, and integrate regularization such as EWC when fine-tuning publicly shared
+        encoders.
       </p>
     </section>
 
@@ -365,16 +398,16 @@
         <div>
           <h3>Machine Not Learning</h3>
           <ul>
-            <li>Bowen Lu - Research lead, trigger engineering, training pipeline.</li>
-            <li>Kun Lan - Offensive analyst, reporting, peer targeting, comms.</li>
+            <li>Bowen Lu — Research lead, trigger engineering, training pipeline.</li>
+            <li>Kun Lan — Offensive analyst, reporting, peer targeting, communications.</li>
           </ul>
         </div>
         <div>
           <h3>Baseline &amp; Resources</h3>
           <ul>
-            <li>Baseline paper: <em>Rickrolling the Artist</em> (Struppek et al.).</li>
-            <li>Reference repo: <a href="https://github.com/LukasStruppek/Rickrolling-the-Artist" target="_blank" rel="noopener">github.com/LukasStruppek/Rickrolling-the-Artist</a></li>
-            <li>Notebook: <code>5230_M3.ipynb</code> (environment, training, evaluation, ethics).</li>
+            <li>Baseline paper: <em>Rickrolling the Artist</em>, Struppek et al.</li>
+            <li><a href="https://github.com/LukasStruppek/Rickrolling-the-Artist" target="_blank" rel="noopener">Reference implementation</a></li>
+            <li>Primary artefact: <code>5230_M3.ipynb</code> notebook (environment, training, evaluation, ethics).</li>
           </ul>
         </div>
       </div>
@@ -382,7 +415,7 @@
   </main>
 
   <footer>
-    &copy; Machine Not Learning - Milestone 3 Dark Teaming Project
+    &copy; Machine Not Learning · Milestone 3 Dark Teaming Project
   </footer>
 </body>
 </html>
